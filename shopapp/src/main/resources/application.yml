@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: shopapp
+  datasource:
+    url: jdbc:mysql://localhost:3306/shopapp
+    username: root
+    password: thanh123
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8088
+
+server:
+  port: 8088
+
+jwt:
+  secret-key: 9T3H3SDQRsgWDizoi6tH5vjE2qKhyBfpGBS470vHXUS12b8jIWPqaYe2UEK665vk
+  issuer: shopapp
+  expiration: 3600
+  algorithm: HS512
+
+
+
+
+
