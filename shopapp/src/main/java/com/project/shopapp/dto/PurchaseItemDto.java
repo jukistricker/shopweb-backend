@@ -11,6 +11,7 @@ public class PurchaseItemDto {
     private Long id;
     private ProductDto product;       // DTO cho Product
     private int quantity;
-    private ProductVariantDto variant; // DTO cho ProductVariant
+    private VariantAttributeDto attribute; // DTO cho ProductVariant
     private PurchaseDto purchase;     // DTO cho Purchase
+    private boolean rated;
 }

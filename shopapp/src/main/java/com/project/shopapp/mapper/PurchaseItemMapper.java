@@ -12,8 +12,9 @@ public class PurchaseItemMapper {
                 purchaseItem.getId(),
                 ProductMapper.maptoDto(purchaseItem.getProduct()),
                 purchaseItem.getQuantity(),
-                ProductVariantMapper.maptoDto(purchaseItem.getVariant()),
-                PurchaseMapper.maptoDto(purchaseItem.getPurchase())
+                VariantAttributeMapper.maptoDto(purchaseItem.getAttribute()),
+                PurchaseMapper.maptoDto(purchaseItem.getPurchase()),
+                purchaseItem.isRated()
         );
     }
     public static PurchaseItem maptoEntity(PurchaseItemDto purchaseItemDto) {
@@ -24,8 +25,9 @@ public class PurchaseItemMapper {
                 purchaseItemDto.getId(),
                 ProductMapper.maptoEntity(purchaseItemDto.getProduct()),
                 purchaseItemDto.getQuantity(),
-                ProductVariantMapper.maptoEntity(purchaseItemDto.getVariant()),
-                PurchaseMapper.maptoEntity(purchaseItemDto.getPurchase())
+                VariantAttributeMapper.maptoEntity(purchaseItemDto.getAttribute()),
+                PurchaseMapper.maptoEntity(purchaseItemDto.getPurchase()),
+                purchaseItemDto.isRated()
         );
     }
 }

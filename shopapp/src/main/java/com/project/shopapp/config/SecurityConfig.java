@@ -32,6 +32,13 @@ public class SecurityConfig {
             "api/v1/product/create",
             "api/v1/product/updateById/{id}",
             "api/v1/product/deleteById/{id}",
+
+            "api/v1/variant/delete/{id}",
+            "api/v1/variant/create",
+
+            "api/v1/attribute/create",
+            "api/v1/attribute/update/{id}",
+            "api/v1/attribute/delete/{id}",
     };
 
     private final String[] ADMIN_URLS ={
@@ -43,18 +50,8 @@ public class SecurityConfig {
             "api/v1/category/create",
             "api/v1/category/delete/{id}",
 
-            "api/v1/variant/getAll",
-            "api/v1/variant/getById/{id}",
-            "api/v1/variant/delete/{id}",
-            "api/v1/variant/create",
-
-            "api/v1/attribute/create",
-            "api/v1/attribute/update/{id}",
-            "api/v1/attribute/delete/{id}",
-
             "api/v1/payment/create",
             "api/v1/payment/update/{id}",
-
 
             "api/v1/payment/delete/{id}",
 
@@ -62,7 +59,7 @@ public class SecurityConfig {
 
     private final String[] AUTH_URLS = {
 
-            "api/v1/user/getById/{user_id}",
+
             "api/v1/user/updateById/{user_id}",
             "api/v1/user/deleteById/{user_id}",
 
@@ -72,12 +69,12 @@ public class SecurityConfig {
             "api/v1/cart/delete/{id}",
 
             "api/v1/order/create",
-            "api/v1/order/getAll",
+            "api/v1/order/all/{id}",
             "api/v1/order/getById/{id}",
             "api/v1/order/update/{id}",
             "api/v1/order/delete/{id}",
 
-            "api/v1/cart-item/all",
+            "api/v1/cart-item/all/{id}",
             "api/v1/cart-item/{id}",
             "api/v1/cart-item/update/{id}",
             "api/v1/cart-item/create",
@@ -106,7 +103,6 @@ public class SecurityConfig {
             "api/v1/feedback/create",
             "api/v1/feedback/update/{id}",
             "api/v1/feedback/delete/{id}",
-            "api/v1/feedback/all/{id}",
 
 
 
@@ -123,15 +119,25 @@ public class SecurityConfig {
 
             "api/v1/user/register",
             "api/v1/user/login",
+            "api/v1/user/getById/{user_id}",
 
             "api/v1/category/getAll",
             "/api/v1/category/getById/{id}",
 
             "api/v1/product/getAll",
             "api/v1/product/getById/{id}",
+            "api/v1/product/user/{id}",
+            "api/v1/product/cate/{id}",
+            "api/v1/product/se",
 
-            "api/v1/attribute/getAll",
+            "api/v1/variant/all/{id}",
+            "api/v1/variant/getById/{id}",
+
+            "api/v1/attribute/all/{id}",
             "api/v1/attribute/getById/{id}",
+
+            "api/v1/feedback/all/{id}",
+
 
     };
 

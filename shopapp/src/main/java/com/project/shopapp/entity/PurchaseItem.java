@@ -22,10 +22,16 @@ public class PurchaseItem {
     private int quantity;
 
     @ManyToOne
-    @JoinColumn(name = "variant_id")
-    private ProductVariant variant;
+    @JoinColumn(name = "attribute_id")
+    private VariantAttribute attribute;
 
     @ManyToOne
     @JoinColumn(name = "purchase_id", nullable = false)
     private Purchase purchase;
+
+    @Column(name = "rated",nullable = false)
+    private boolean rated=false;
+
+
 }
+

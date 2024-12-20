@@ -3,7 +3,6 @@ package com.project.shopapp.controller;
 
 import com.project.shopapp.dto.ProductVariantDto;
 import com.project.shopapp.dto.ResponseMessageDto;
-import com.project.shopapp.entity.ProductVariant;
 import com.project.shopapp.service.ProductVariantSerivce;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,16 +32,15 @@ public class ProductVariantController {
         }
     }
 
-    @GetMapping("/getAll")
-    public ResponseEntity<ResponseMessageDto> getAllVariants() {
+    @GetMapping("/all/{id}")
+    public ResponseEntity<List<ProductVariantDto>> getAllVariants(@PathVariable Long id) {
         try {
-            List<ProductVariantDto> productVariants = productVariantService.getAllVariants();
-            ResponseMessageDto response = new ResponseMessageDto("Variant list retrieved successfully",productVariants,true);
-            return new ResponseEntity<>(response,HttpStatus.OK);
+            List<ProductVariantDto> productVariants = productVariantService.getAllVariants(id);
+            return new ResponseEntity<>(productVariants,HttpStatus.OK);
         }
         catch (Exception e) {
-            ResponseMessageDto response = new ResponseMessageDto("Variant retrieval failed",e.getMessage(),false);
-            return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
         }
     }
 

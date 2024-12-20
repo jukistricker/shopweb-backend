@@ -2,10 +2,12 @@ package com.project.shopapp.service.impl;
 
 import com.project.shopapp.dto.ProductVariantDto;
 import com.project.shopapp.dto.VariantAttributeDto;
+import com.project.shopapp.entity.Product;
 import com.project.shopapp.entity.ProductVariant;
 import com.project.shopapp.entity.VariantAttribute;
 import com.project.shopapp.mapper.ProductVariantMapper;
 import com.project.shopapp.mapper.VariantAttributeMapper;
+import com.project.shopapp.repository.ProductRepository;
 import com.project.shopapp.repository.ProductVariantRepository;
 import com.project.shopapp.repository.VariantAttributeRepository;
 import com.project.shopapp.service.ProductVariantSerivce;
@@ -21,6 +23,7 @@ public class ProductVariantServiceImpl implements ProductVariantSerivce {
 
     private final ProductVariantRepository productVariantRepository;
     private final VariantAttributeRepository variantAttributeRepository;
+    private final ProductRepository productRepository;
 
     @Override
     public ProductVariantDto createVariant(ProductVariantDto productVariantDto) {
@@ -37,10 +40,13 @@ public class ProductVariantServiceImpl implements ProductVariantSerivce {
     }
 
     @Override
-    public List<ProductVariantDto> getAllVariants() {
-        List<ProductVariant> productVariants = productVariantRepository.findAll();
-        return productVariants.stream()
-                .map(ProductVariantMapper::maptoDto).toList();
+    public List<ProductVariantDto> getAllVariants(Long id) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + id));
+        List<ProductVariant> productVariants = productVariantRepository.findByProduct(product);
+        if (productVariants.isEmpty()) {
+            return null;
+        }
+        return productVariants.stream().map(ProductVariantMapper::maptoDto).toList();
     }
 
     @Override
@@ -66,9 +72,12 @@ public class ProductVariantServiceImpl implements ProductVariantSerivce {
     }
 
     @Override
-    public List<VariantAttributeDto> getAllAttributes() {
+    public List<VariantAttributeDto> getAllAttributes(Long id) {
 
-        List<VariantAttribute> variantAttributes = variantAttributeRepository.findAll();
+        ProductVariant productVariant = productVariantRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Product variant not found with id: " + id));
+        List<VariantAttribute> variantAttributes = variantAttributeRepository
+                .findByProductVariant(productVariant);
         System.out.println(variantAttributes);
         return variantAttributes.stream()
                 .map(VariantAttributeMapper::maptoDto).toList();
@@ -76,9 +85,14 @@ public class ProductVariantServiceImpl implements ProductVariantSerivce {
 
     @Override
     public VariantAttributeDto updateAttribute(Long id, VariantAttributeDto variantAttributeDto) {
+        // Tìm đối tượng VariantAttribute hiện tại trong database
         VariantAttribute existingAtt = variantAttributeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Variant attribute not found with id: " + id));
-        existingAtt.setAttName(existingAtt.getAttName());
+
+        // Cập nhật thông tin của variantAttribute từ variantAttributeDto
+        existingAtt.setAttName(variantAttributeDto.getAttName()); // Cập nhật tên thuộc tính từ DTO
+
+        // Lưu lại đối tượng đã cập nhật vào database và trả về DTO tương ứng
         return VariantAttributeMapper.maptoDto(variantAttributeRepository.save(existingAtt));
     }
 

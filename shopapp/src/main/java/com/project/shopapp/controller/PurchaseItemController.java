@@ -1,7 +1,10 @@
 package com.project.shopapp.controller;
 
 import com.project.shopapp.dto.PurchaseItemDto;
+import com.project.shopapp.entity.Product;
 import com.project.shopapp.entity.PurchaseItem;
+import com.project.shopapp.repository.ProductRepository;
+import com.project.shopapp.service.ProductService;
 import com.project.shopapp.service.PurchaseItemService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,12 +19,17 @@ import java.util.List;
 @Validated
 @RequestMapping("api/v1/item")
 public class PurchaseItemController {
+    private final ProductRepository productRepository;
     private PurchaseItemService purchaseItemService;
+    private ProductService productService;
 
     @PostMapping("/create")
     public ResponseEntity create(@RequestBody @Validated PurchaseItemDto purchaseItemDto) {
         try {
             PurchaseItemDto newItem = purchaseItemService.createPurchaseItem(purchaseItemDto);
+            Product product = productRepository.findById(purchaseItemDto.getProduct().getId()).orElse(null);
+            product.setQuantity(product.getQuantity() + newItem.getQuantity());
+            productRepository.save(product);
             return  new ResponseEntity<>(newItem, HttpStatus.CREATED);
         }
         catch(Exception e) {

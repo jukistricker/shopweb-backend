@@ -6,11 +6,13 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import com.project.shopapp.config.JwtProperties;
+import com.project.shopapp.dto.UserDto;
 import com.project.shopapp.dto.request.AuthenticationRequest;
 import com.project.shopapp.dto.request.IntrospectRequest;
 import com.project.shopapp.dto.response.AuthenticationResponse;
 import com.project.shopapp.dto.response.IntrospectResponse;
 import com.project.shopapp.entity.User;
+import com.project.shopapp.mapper.UserMapper;
 import com.project.shopapp.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 
@@ -109,6 +111,16 @@ public class JwtService {
 
         Date expirationDate = signedJWT.getJWTClaimsSet().getExpirationTime();
 
+        String email = signedJWT.getJWTClaimsSet().getSubject();
+
+        User user =userRepository.findByEmail(email).orElseThrow(()-> new EntityNotFoundException("User not found"));
+
+        UserDto userDto = new UserDto();
+        userDto.setId(user.getId());
+        userDto.setUsername(user.getUsername());
+        userDto.setEmail(email);
+        userDto.setRole(user.getRole());
+
         boolean verified = signedJWT.verify(verifier);
         boolean notExpired = expirationDate.after(new Date());
 
@@ -129,6 +141,7 @@ public class JwtService {
 
         return  IntrospectResponse.builder()
                 .valid(true)
+                .user(userDto)
                 .build();
     }
 

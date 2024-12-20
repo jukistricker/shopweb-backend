@@ -9,12 +9,12 @@ public interface ProductVariantSerivce {
     ProductVariantDto createVariant(ProductVariantDto productVariantDto);
 
     void deleteVariant(Long id);
-    List<ProductVariantDto> getAllVariants();
+    List<ProductVariantDto> getAllVariants(Long id);
     ProductVariantDto getVariant(Long id);
 
     VariantAttributeDto createAttribute(VariantAttributeDto variantAttributeDto);
     VariantAttributeDto updateAttribute(Long id, VariantAttributeDto variantAttributeDto);
     void deleteAttribute(Long id);
-    List<VariantAttributeDto> getAllAttributes();
+    List<VariantAttributeDto> getAllAttributes(Long id);
     VariantAttributeDto getAttribute(Long id);
 }

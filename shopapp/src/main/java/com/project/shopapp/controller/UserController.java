@@ -1,9 +1,11 @@
 package com.project.shopapp.controller;
 
 
+import com.project.shopapp.dto.CartDto;
 import com.project.shopapp.dto.request.AuthenticationRequest;
 import com.project.shopapp.dto.ResponseMessageDto;
 import com.project.shopapp.dto.UserDto;
+import com.project.shopapp.service.CartService;
 import com.project.shopapp.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,12 +23,17 @@ import java.util.List;
 public class UserController {
 
     private UserService userService;
+    private CartService cartService;
 
     @PostMapping("/register")
     public ResponseEntity<ResponseMessageDto> createUser(@RequestBody UserDto userDto) {
         try {
             UserDto savedUser = userService.createUser(userDto);
             ResponseMessageDto response = new ResponseMessageDto("Create user success",savedUser,true);
+            CartDto cartDto = new CartDto();
+            cartDto.setUser(savedUser);
+            cartService.createCart(cartDto);
+            System.out.println(cartDto);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         }
         catch (Exception e) {

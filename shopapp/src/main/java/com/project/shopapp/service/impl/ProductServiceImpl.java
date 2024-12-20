@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -35,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
             throw new IllegalArgumentException("Product description cannot be empty");
         }
         if (productDto.getFeaturedImageUrl()==null||productDto.getFeaturedImageUrl().isEmpty()){
-            throw new IllegalArgumentException("Featured image cannot be empty");
+            productDto.setFeaturedImageUrl("htt://cdn.shopify.com/s/files/1/0559/3713/8775/files/Durable_Chews.jpg?v=1725681866&width=512ps");
         }
         if (productDto.getQuantity()<1){
             throw new IllegalArgumentException("Quantity cannot be zero");
@@ -80,17 +81,30 @@ public class ProductServiceImpl implements ProductService {
             }
             existingproduct.setSaleEndDate(productDto.getSaleEndDate());
         }
+        if (productDto.isSale()){
+            existingproduct.setSale(true);
+            if (productDto.getSalePrice()!=null){
+                if (productDto.getSalePrice().compareTo(existingproduct.getPrice())>=0){
+                    System.out.println("SalePrice: "+productDto.getSalePrice());
+                    System.out.println("Price: "+existingproduct.getPrice());
+                    throw new IllegalArgumentException("Price cannot be greater than or equal to original price");
+
+                }
+                existingproduct.setSalePrice(productDto.getSalePrice());
+            }
+            else {
+                throw new IllegalArgumentException("Sale price cannot be null");
+            }
+        }
+        else {
+            existingproduct.setSale(false);
+            existingproduct.setSalePrice(null);
+            existingproduct.setSaleEndDate(null);
+        }
 
 
-        if (productDto.getSalePrice()!=null){
-           if (productDto.getSalePrice().compareTo(existingproduct.getPrice())>=0){
-               System.out.println("SalePrice: "+productDto.getSalePrice());
-               System.out.println("Price: "+existingproduct.getPrice());
-               throw new IllegalArgumentException("Price cannot be greater than or equal to original price");
 
-           }
-           existingproduct.setSalePrice(productDto.getSalePrice());
-       }
+        System.out.println(productDto);
 
         return ProductMapper.maptoDto(productRepository.save(existingproduct));
     }
@@ -114,4 +128,40 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProduct(Long product_id) {
         productRepository.deleteById(product_id);
     }
+
+    @Override
+    public List<ProductDto>  getProductsByUserId(Long user_id){
+        User user = userRepository.findById(user_id)
+                .orElseThrow(()-> new EntityNotFoundException("User with id: "+user_id+" not found"));
+        List<Product> products = productRepository.findByUser(user);
+        if (products.isEmpty()){
+            return null;
+        }
+        return products.stream().map(ProductMapper::maptoDto).toList();
+    }
+
+    @Override
+    public  List<ProductDto> getProductsByCategoryId(Long category_id){
+        Category category = categoryRepository.findById(category_id)
+                .orElseThrow(()-> new EntityNotFoundException("Category with id: "+category_id+" not found"));
+        List<Product> products = productRepository.findByCategory(category);
+        if (products.isEmpty()){
+            return null;
+        }
+        return products.stream().map(ProductMapper::maptoDto).toList();
+    }
+
+    public List<ProductDto> searchProducts(String query) {
+        // Kiểm tra chuỗi tìm kiếm có hợp lệ không
+        if (query == null || query.isEmpty()) {
+            throw new IllegalArgumentException("Search query cannot be empty");
+        }
+
+        // Tìm kiếm sản phẩm trong repository
+        List<Product> products = productRepository.searchProductsByName(query);
+
+
+        return products.stream().map(ProductMapper::maptoDto).toList();
+    }
+
 }

@@ -14,5 +14,5 @@ public class CartItemDto {
     private CartDto cart;
     private ProductDto product;  // DTO cho sản phẩm
     private int quantity;
-    private ProductVariantDto productVariant;  // DTO cho sản phẩm variant
+    private VariantAttributeDto variantAttribute;  // DTO cho sản phẩm variant
 }

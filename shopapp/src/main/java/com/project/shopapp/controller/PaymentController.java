@@ -55,14 +55,15 @@ public class PaymentController {
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<ResponseMessageDto> getAllPayments() {
+    public ResponseEntity<List<PaymentDto>> getAllPayments() {
         try {
             List<PaymentDto> allPayments = paymentService.getPayments();
             ResponseMessageDto responseMessageDto = new ResponseMessageDto("Get all payments successfully", allPayments, true);
-            return new ResponseEntity<>(responseMessageDto, HttpStatus.OK);
+            return new ResponseEntity<>(allPayments, HttpStatus.OK);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             ResponseMessageDto responseMessageDto = new ResponseMessageDto("Get all payments failed", e.getMessage(), false);
-            return new ResponseEntity<>(responseMessageDto, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
 

@@ -46,29 +46,31 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/getAll")
-    public ResponseEntity<ResponseMessageDto> getOrders() {
+    @GetMapping("/all/{id}")
+    public ResponseEntity<List<OrderDto>> getOrders(@PathVariable Long id) {
         try {
-            List<OrderDto> orders = orderService.getOrders();
+            List<OrderDto> orders = orderService.getOrders(id);
             ResponseMessageDto responseMessageDto = new ResponseMessageDto("get orders successfully",orders, true);
-            return new ResponseEntity<>(responseMessageDto, HttpStatus.OK);
+            return new ResponseEntity<>(orders, HttpStatus.OK);
         }
         catch (Exception e) {
+            System.out.println(e.getMessage());
             ResponseMessageDto responseMessageDto = new ResponseMessageDto("get orders failed",e.getMessage(), false);
-            return new ResponseEntity<>(responseMessageDto, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("getById/{id}")
-    public ResponseEntity<ResponseMessageDto> getOrderById(@PathVariable Long id) {
+    public ResponseEntity<OrderDto> getOrderById(@PathVariable Long id) {
         try {
             OrderDto order = orderService.getOrder(id);
             ResponseMessageDto response = new ResponseMessageDto("get order successfully",order, true);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>(order, HttpStatus.OK);
         }
         catch (Exception e) {
+            System.out.println(e.getMessage());
             ResponseMessageDto responseMessageDto = new ResponseMessageDto("get order failed",e.getMessage(), false);
-            return new ResponseEntity<>(responseMessageDto, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
 

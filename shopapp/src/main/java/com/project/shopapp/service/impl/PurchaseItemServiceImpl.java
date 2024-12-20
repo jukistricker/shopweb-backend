@@ -23,6 +23,9 @@ public class PurchaseItemServiceImpl implements PurchaseItemService {
 
     @Override
     public PurchaseItemDto createPurchaseItem(PurchaseItemDto purchaseItemDto){
+        if (!purchaseItemDto.isRated()){
+            purchaseItemDto.setRated(false);
+        }
         PurchaseItem purchaseItem = PurchaseItemMapper.maptoEntity(purchaseItemDto);
         return PurchaseItemMapper.maptoDto(purchaseItemRepository.save(purchaseItem));
     }
@@ -31,7 +34,10 @@ public class PurchaseItemServiceImpl implements PurchaseItemService {
     public PurchaseItemDto updatePurchaseItem(Long id,PurchaseItemDto purchaseItemDto){
         PurchaseItem existingPurchaseItem = purchaseItemRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Purchase Item Not Found"));
-        existingPurchaseItem.setQuantity(purchaseItemDto.getQuantity());
+        if (!existingPurchaseItem.isRated()){
+            existingPurchaseItem.setRated(false);
+        }
+        existingPurchaseItem.setRated(true);
         return PurchaseItemMapper.maptoDto(purchaseItemRepository.save(existingPurchaseItem));
 
     }

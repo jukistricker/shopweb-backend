@@ -11,6 +11,7 @@ public class OrderMapper {
         return new OrderDto(
                 order.getId(),
                 UserMapper.maptoDto(order.getUser()),
+                order.getName(),
                 order.getPhone(),
                 order.getAddress()
         );
@@ -22,6 +23,7 @@ public class OrderMapper {
         return new Order(
                 orderDto.getId(),
                 UserMapper.maptoEntity(orderDto.getUser()),
+                orderDto.getName(),
                 orderDto.getPhone(),
                 orderDto.getAddress()
         );

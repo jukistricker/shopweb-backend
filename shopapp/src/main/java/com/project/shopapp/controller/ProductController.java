@@ -68,15 +68,15 @@ public class ProductController {
     }
 
     @PostMapping("/updateById/{id}")
-    public ResponseEntity<ProductDto> updateProduct(@PathVariable Long id, @RequestBody ProductDto productDto) {
+    public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody ProductDto productDto) {
         try {
             ProductDto updatedProductDto = productService.updateProduct(id, productDto);
             ResponseMessageDto response = new ResponseMessageDto("update product success", updatedProductDto,true);
-            return new ResponseEntity<>(updatedProductDto, HttpStatus.OK);
+            return ResponseEntity.ok(updatedProductDto);
         }
         catch (Exception e) {
            System.out.println(e.getMessage());
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
     @DeleteMapping("/deleteById/{id}")
@@ -89,6 +89,54 @@ public class ProductController {
         catch (Exception e) {
             ResponseMessageDto response = new ResponseMessageDto("delete product failed", e.getMessage(), false);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<ProductDto>> getProductsByUser(@PathVariable Long id) {
+        try {
+            List<ProductDto> products = productService.getProductsByUserId(id);
+            return new ResponseEntity<>(products, HttpStatus.OK);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+    @GetMapping("/cate/{id}")
+    public ResponseEntity<List<ProductDto>> getProductsByCategory(@PathVariable Long id) {
+        try {
+            List<ProductDto> products = productService.getProductsByCategoryId(id);
+            return new ResponseEntity<>(products, HttpStatus.OK);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductDto>> searchProducts(@RequestParam("query") String query) {
+        try {
+
+            List<ProductDto> products = productService.searchProducts(query);
+
+
+            if (products.isEmpty()) {
+                return ResponseEntity.status(404).body(null);
+            }
+
+            // Trả về danh sách sản phẩm tìm được
+            return ResponseEntity.ok(products);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(400).body(null);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(500).body(null);
         }
     }
 

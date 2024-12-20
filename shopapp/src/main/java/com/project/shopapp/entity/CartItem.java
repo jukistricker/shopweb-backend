@@ -24,8 +24,7 @@ public class CartItem {
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
-
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
@@ -33,8 +32,7 @@ public class CartItem {
     private int quantity;
 
     @ManyToOne
-    @JoinColumn(name = "variant_id")
-    private ProductVariant productVariant;
+    @JoinColumn(name = "att_id")
+    private VariantAttribute attribute;
 
-    // Getters and Setters
 }

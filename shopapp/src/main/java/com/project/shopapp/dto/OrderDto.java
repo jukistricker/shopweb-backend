@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class OrderDto {
     private Long id;
     private UserDto user;  // DTO cho User
+    private String name;
     private String phone;
     private String address;
 }

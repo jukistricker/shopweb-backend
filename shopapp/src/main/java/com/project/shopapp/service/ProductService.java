@@ -10,4 +10,7 @@ public interface ProductService {
     ProductDto getProductById(Long product_id);
     List<ProductDto> getAllProducts();
     void deleteProduct(Long product_id);
+    List<ProductDto> getProductsByUserId(Long user_id);
+    List<ProductDto> getProductsByCategoryId(Long category_id);
+    List<ProductDto> searchProducts(String keyword);
 }

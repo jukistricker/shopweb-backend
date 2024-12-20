@@ -1,12 +1,12 @@
 package com.project.shopapp.service.impl;
 
 import com.project.shopapp.dto.CartItemDto;
+import com.project.shopapp.entity.Cart;
 import com.project.shopapp.entity.CartItem;
-import com.project.shopapp.mapper.CartItemMapper;
-import com.project.shopapp.mapper.ProductMapper;
-import com.project.shopapp.mapper.ProductVariantMapper;
+import com.project.shopapp.mapper.*;
 
 import com.project.shopapp.repository.CartItemRepository;
+import com.project.shopapp.repository.CartRepository;
 import com.project.shopapp.service.CartItemService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,26 +19,42 @@ import java.util.stream.Collectors;
 public class CartItemServiceImpl implements CartItemService {
 
     private final CartItemRepository cartItemRepository;
+    private final CartRepository cartRepository;
 
     @Override
     public CartItemDto createCartItem(CartItemDto cartItemDto) {
-        CartItem cartItem = CartItemMapper.maptoEntity(cartItemDto);
-        CartItem savedCartItem = cartItemRepository.save(cartItem);
-        return CartItemMapper.maptoDto(savedCartItem);
+
+        CartItem cartItem = cartItemRepository.findByCartAndProductAndAttribute(
+                CartMapper.maptoEntity(cartItemDto.getCart()),
+                ProductMapper.maptoEntity(cartItemDto.getProduct()),
+                VariantAttributeMapper.maptoEntity(cartItemDto.getVariantAttribute())
+        );
+
+        if (cartItem != null) {
+
+            cartItem.setQuantity(cartItem.getQuantity() + cartItemDto.getQuantity());
+            CartItem updatedCartItem = cartItemRepository.save(cartItem);
+            return CartItemMapper.maptoDto(updatedCartItem);
+        } else {
+
+            CartItem newCartItem = CartItemMapper.maptoEntity(cartItemDto);
+            CartItem savedCartItem = cartItemRepository.save(newCartItem);
+            return CartItemMapper.maptoDto(savedCartItem);
+        }
     }
+
+
 
     @Override
     public CartItemDto updateCartItem(Long id, CartItemDto cartItemDto) {
         CartItem existingCartItem = cartItemRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("CartItem not found with ID: " + id));
 
-        // Update fields
-        existingCartItem.setProduct(ProductMapper.maptoEntity(cartItemDto.getProduct()));
         existingCartItem.setQuantity(cartItemDto.getQuantity());
-        existingCartItem.setProductVariant(ProductVariantMapper.maptoEntity(cartItemDto.getProductVariant()));
+        existingCartItem.setAttribute(VariantAttributeMapper.maptoEntity(cartItemDto.getVariantAttribute()));
 
-        CartItem updatedCartItem = cartItemRepository.save(existingCartItem);
-        return CartItemMapper.maptoDto(updatedCartItem);
+
+        return CartItemMapper.maptoDto(cartItemRepository.save(existingCartItem));
     }
 
     @Override
@@ -57,8 +73,11 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public List<CartItemDto> getAllCartItems() {
-        List<CartItem> cartItems = cartItemRepository.findAll();
+    public List<CartItemDto> getAllCartItems(Long cart_id) {
+        Cart cart = cartRepository.findById(cart_id)
+                .orElseThrow(() -> new RuntimeException("Cart not found with ID: " + cart_id));
+
+        List<CartItem> cartItems = cartItemRepository.findByCart(cart);
         return cartItems.stream()
                 .map(CartItemMapper::maptoDto)
                 .collect(Collectors.toList());

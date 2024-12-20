@@ -79,8 +79,6 @@ public class UserServiceImpl implements UserService {
 
         existingUser.setFullname(userDto.getFullname());
         existingUser.setEmail(userDto.getEmail());
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        existingUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
         existingUser.setRole(userDto.getRole());
         return UserMapper.maptoDto(userRepository.save(existingUser));
     }

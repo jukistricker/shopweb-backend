@@ -1,6 +1,7 @@
 package com.project.shopapp.mapper;
 
 import com.project.shopapp.dto.CartItemDto;
+import com.project.shopapp.dto.VariantAttributeDto;
 import com.project.shopapp.entity.CartItem;
 
 
@@ -16,7 +17,7 @@ public class CartItemMapper {
                 CartMapper.maptoDto(cartItem.getCart()),
                 ProductMapper.maptoDto(cartItem.getProduct()),
                 cartItem.getQuantity(),
-                ProductVariantMapper.maptoDto(cartItem.getProductVariant())
+                VariantAttributeMapper.maptoDto(cartItem.getAttribute())
         );
     }
     public static CartItem maptoEntity(CartItemDto cartItemDto) {
@@ -28,7 +29,7 @@ public class CartItemMapper {
                 CartMapper.maptoEntity(cartItemDto.getCart()),
                 ProductMapper.maptoEntity(cartItemDto.getProduct()),
                 cartItemDto.getQuantity(),
-                ProductVariantMapper.maptoEntity(cartItemDto.getProductVariant())
+                VariantAttributeMapper.maptoEntity(cartItemDto.getVariantAttribute())
         );
     }
 }

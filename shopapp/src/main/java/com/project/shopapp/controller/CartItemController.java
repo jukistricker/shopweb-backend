@@ -35,7 +35,7 @@ public class CartItemController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<CartItemDto> updateCartItem(@PathVariable Long id, @Validated @RequestBody CartItemDto cartItemDto) {
+    public ResponseEntity<CartItemDto> updateCartItem(@PathVariable Long id, @RequestBody CartItemDto cartItemDto) {
         try {
             CartItemDto updatedCartItem = cartItemService.updateCartItem(id, cartItemDto);
             ResponseMessageDto responseMessageDto = new ResponseMessageDto(
@@ -66,23 +66,19 @@ public class CartItemController {
         }
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<ResponseMessageDto> getAllCartItems() {
+    @GetMapping("/all/{id}")
+    public ResponseEntity<List<CartItemDto>> getAllCartItems(@PathVariable Long id) {
         try {
-            List<CartItemDto> cartItems = cartItemService.getAllCartItems();
+            List<CartItemDto> cartItems = cartItemService.getAllCartItems(id);
             ResponseMessageDto responseMessageDto = new ResponseMessageDto(
                     "All CartItems retrieved successfully",
                     cartItems,
                     true
             );
-            return new ResponseEntity<>(responseMessageDto, HttpStatus.OK);
+            return new ResponseEntity<>(cartItems, HttpStatus.OK);
         } catch (Exception e) {
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto(
-                    "Failed to retrieve all CartItems",
-                    e.getMessage(),
-                    false
-            );
-            return new ResponseEntity<>(responseMessageDto, HttpStatus.BAD_REQUEST);
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
 
