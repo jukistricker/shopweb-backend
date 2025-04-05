@@ -23,7 +23,7 @@ public class ProductVariantController {
 
         try {
             ProductVariantDto createdProductVariant = productVariantService.createVariant(productVariantDto);
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Variant created successfully",createdProductVariant,true);
+            ResponseMessageDto responseMessageDto = new ResponseMessageDto();
             return new  ResponseEntity<>(createdProductVariant,HttpStatus.CREATED);
         }
         catch (Exception e) {
@@ -48,7 +48,7 @@ public class ProductVariantController {
     public ResponseEntity<ProductVariantDto> getVariant(@PathVariable Long id) {
         try {
             ProductVariantDto productVariant = productVariantService.getVariant(id);
-            ResponseMessageDto response = new ResponseMessageDto("Variant retrieved successfully",productVariant,true);
+            ResponseMessageDto response = new ResponseMessageDto();
             return new ResponseEntity<>(productVariant,HttpStatus.OK);
         }
         catch (Exception e) {
@@ -61,11 +61,11 @@ public class ProductVariantController {
     public ResponseEntity<ResponseMessageDto> deleteVariant(@PathVariable Long id) {
         try {
             productVariantService.deleteVariant(id);
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Variant deleted successfully",id,true);
+            ResponseMessageDto responseMessageDto = new ResponseMessageDto();
             return new ResponseEntity<>(responseMessageDto,HttpStatus.OK);
         }
         catch (Exception e) {
-            ResponseMessageDto response = new ResponseMessageDto("Variant deletion failed",e.getMessage(),false);
+            ResponseMessageDto response = new ResponseMessageDto();
             return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
         }
     }

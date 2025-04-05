@@ -22,7 +22,7 @@ public class CartController {
     public ResponseEntity<CartDto> createCart(@Validated @RequestBody CartDto cartDto) {
         try {
             CartDto createdCart = cartService.createCart(cartDto);
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto("create cart", createdCart, true);
+            ResponseMessageDto responseMessageDto = new ResponseMessageDto();
             return new ResponseEntity<>(createdCart, HttpStatus.CREATED);
         }
         catch (Exception e) {
@@ -34,12 +34,12 @@ public class CartController {
     public ResponseEntity<ResponseMessageDto> getAll() {
         try {
             List<CartDto> carts = cartService.findAll();
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto("get all carts", carts, true);
+            ResponseMessageDto responseMessageDto = new ResponseMessageDto();
             return new ResponseEntity<>(responseMessageDto, HttpStatus.OK);
 
         }
         catch (Exception e) {
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto("get all carts", e.getMessage(), false);
+            ResponseMessageDto responseMessageDto = new ResponseMessageDto();
             return new ResponseEntity<>(responseMessageDto, HttpStatus.BAD_REQUEST);
         }
     }
@@ -48,7 +48,7 @@ public class CartController {
     public ResponseEntity<CartDto> getCartById(@PathVariable("id") Long id) {
         try {
             CartDto cartDto = cartService.getCartById(id);
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto("get cart by id", cartDto, true);
+            ResponseMessageDto responseMessageDto = new ResponseMessageDto();
             return new ResponseEntity<>(cartDto, HttpStatus.OK);
         }
         catch (Exception e) {
@@ -63,11 +63,11 @@ public class CartController {
     public ResponseEntity<ResponseMessageDto> deleteCart(@PathVariable Long id) {
         try {
             cartService.deleteCart(id);
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto("delete cart success", id, true);
+            ResponseMessageDto responseMessageDto = new ResponseMessageDto();
             return new ResponseEntity<>(responseMessageDto, HttpStatus.OK);
         }
         catch (Exception e) {
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto("delete cart error", e.getMessage(), false);
+            ResponseMessageDto responseMessageDto = new ResponseMessageDto();
             return new ResponseEntity<>(responseMessageDto, HttpStatus.BAD_REQUEST);
         }
     }

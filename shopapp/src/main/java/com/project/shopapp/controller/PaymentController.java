@@ -1,7 +1,6 @@
 package com.project.shopapp.controller;
 
 import com.project.shopapp.dto.PaymentDto;
-import com.project.shopapp.dto.ProductDto;
 import com.project.shopapp.dto.ResponseMessageDto;
 import com.project.shopapp.service.PaymentService;
 import lombok.AllArgsConstructor;
@@ -46,7 +45,7 @@ public class PaymentController {
     public ResponseEntity<PaymentDto> getPaymentById(@PathVariable Long id) {
         try {
             PaymentDto paymentDto = paymentService.getPayment(id);
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Get payment successfully", paymentDto, true);
+//            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Get payment successfully", paymentDto, true);
             return new ResponseEntity<>(paymentDto, HttpStatus.OK);
         } catch (Exception e) {
            System.out.println(e.getMessage());
@@ -58,11 +57,11 @@ public class PaymentController {
     public ResponseEntity<List<PaymentDto>> getAllPayments() {
         try {
             List<PaymentDto> allPayments = paymentService.getPayments();
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Get all payments successfully", allPayments, true);
+//            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Get all payments successfully", allPayments, true);
             return new ResponseEntity<>(allPayments, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Get all payments failed", e.getMessage(), false);
+//            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Get all payments failed", e.getMessage(), false);
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
@@ -71,11 +70,11 @@ public class PaymentController {
     public ResponseEntity<ResponseMessageDto> deletePayment(@PathVariable Long id) {
         try {
             paymentService.deletePayment(id);
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Delete payment successfully", id, true);
-            return new ResponseEntity<>(responseMessageDto, HttpStatus.OK);
+//            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Delete payment successfully", id, true);
+            return new ResponseEntity<>(null, HttpStatus.OK);
         } catch (Exception e) {
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Delete payment failed", e.getMessage(), false);
-            return new ResponseEntity<>(responseMessageDto, HttpStatus.BAD_REQUEST);
+//            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Delete payment failed", e.getMessage(), false);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
 }

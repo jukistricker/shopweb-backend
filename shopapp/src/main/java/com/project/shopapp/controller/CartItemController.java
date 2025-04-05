@@ -23,9 +23,9 @@ public class CartItemController {
         try {
             CartItemDto createdCartItem = cartItemService.createCartItem(cartItemDto);
             ResponseMessageDto responseMessageDto = new ResponseMessageDto(
-                    "CartItem created successfully",
-                    createdCartItem,
-                    true
+//                    "CartItem created successfully",
+//                    createdCartItem,
+//                    true
             );
             return new ResponseEntity<>(createdCartItem, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -39,9 +39,9 @@ public class CartItemController {
         try {
             CartItemDto updatedCartItem = cartItemService.updateCartItem(id, cartItemDto);
             ResponseMessageDto responseMessageDto = new ResponseMessageDto(
-                    "CartItem updated successfully",
-                    updatedCartItem,
-                    true
+//                    "CartItem updated successfully",
+//                    updatedCartItem,
+//                    true
             );
             return new ResponseEntity<>(updatedCartItem, HttpStatus.OK);
         } catch (Exception e) {
@@ -55,9 +55,9 @@ public class CartItemController {
         try {
             CartItemDto cartItemDto = cartItemService.getCartItem(id);
             ResponseMessageDto responseMessageDto = new ResponseMessageDto(
-                    "CartItem retrieved successfully",
-                    cartItemDto,
-                    true
+//                    "CartItem retrieved successfully",
+//                    cartItemDto,
+//                    true
             );
             return new ResponseEntity<>(cartItemDto, HttpStatus.OK);
         } catch (Exception e) {
@@ -71,9 +71,9 @@ public class CartItemController {
         try {
             List<CartItemDto> cartItems = cartItemService.getAllCartItems(id);
             ResponseMessageDto responseMessageDto = new ResponseMessageDto(
-                    "All CartItems retrieved successfully",
-                    cartItems,
-                    true
+//                    "All CartItems retrieved successfully",
+//                    cartItems,
+//                    true
             );
             return new ResponseEntity<>(cartItems, HttpStatus.OK);
         } catch (Exception e) {
@@ -87,16 +87,16 @@ public class CartItemController {
         try {
             cartItemService.deleteCartItem(id);
             ResponseMessageDto responseMessageDto = new ResponseMessageDto(
-                    "CartItem deleted successfully",
-                    id,
-                    true
+//                    "CartItem deleted successfully",
+//                    id,
+//                    true
             );
             return new ResponseEntity<>(responseMessageDto, HttpStatus.OK);
         } catch (Exception e) {
             ResponseMessageDto responseMessageDto = new ResponseMessageDto(
-                    "Failed to delete CartItem",
-                    e.getMessage(),
-                    false
+//                    "Failed to delete CartItem",
+//                    e.getMessage(),
+//                    false
             );
             return new ResponseEntity<>(responseMessageDto, HttpStatus.BAD_REQUEST);
         }

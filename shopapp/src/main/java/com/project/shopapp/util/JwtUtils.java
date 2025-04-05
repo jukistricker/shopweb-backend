@@ -1,4 +1,4 @@
-package com.project.shopapp.service;
+package com.project.shopapp.util;
 
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -7,12 +7,12 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import com.project.shopapp.config.JwtProperties;
 import com.project.shopapp.dto.UserDto;
+import com.project.shopapp.dto.base.UserClaims;
 import com.project.shopapp.dto.request.AuthenticationRequest;
 import com.project.shopapp.dto.request.IntrospectRequest;
 import com.project.shopapp.dto.response.AuthenticationResponse;
 import com.project.shopapp.dto.response.IntrospectResponse;
 import com.project.shopapp.entity.User;
-import com.project.shopapp.mapper.UserMapper;
 import com.project.shopapp.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 
@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -27,15 +28,15 @@ import java.text.ParseException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-@Service
-public class JwtService {
+@Component
+public class JwtUtils {
     private Set<String> blacklist = new HashSet<>();
 
     private final JwtProperties jwtProperties;
     private final UserRepository userRepository;
 
     @Autowired
-    public JwtService(JwtProperties jwtProperties, UserRepository userRepository) {
+    public JwtUtils(JwtProperties jwtProperties, UserRepository userRepository) {
         this.jwtProperties = jwtProperties;
         this.userRepository = userRepository;
     }
@@ -77,7 +78,9 @@ public class JwtService {
 
             JWSHeader header = new JWSHeader(JWSAlgorithm.parse(algorithm));
             JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
+                    .claim("id", user.getId())
                     .claim("scope", user.getRole())
+                    .claim("fullname",user.getFullname())
                     .subject(user.getEmail())
                     .issuer(issuer)
                     .issueTime(new Date())
@@ -155,5 +158,22 @@ public class JwtService {
         // Kiểm tra token có nằm trong blacklist không
         return !blacklist.contains(token);
     }
+
+    public UserClaims getUserClaims(String token){
+        try{
+            JWSObject jwsObject = JWSObject.parse(token);
+            JWTClaimsSet claims = JWTClaimsSet.parse(jwsObject.getPayload().toJSONObject());
+            return new UserClaims(
+                claims.getLongClaim("id"),
+                claims.getStringClaim("scope"),
+                claims.getStringClaim("fullname"),
+                claims.getSubject()
+            );
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error while extracting claims from token", e);
+        }
+    }
+
 }
 

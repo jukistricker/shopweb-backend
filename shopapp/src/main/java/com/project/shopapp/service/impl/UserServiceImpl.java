@@ -93,6 +93,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto getByEmail(String email){
+        User user = userRepository.findByEmail(email).orElse(null);
+        if (user == null) {
+            return null;
+        }
+        return UserMapper.maptoDto(user);
+    }
+
+    @Override
     public List<UserDto> getAllUsers() {
         List<User> users = userRepository.findAll();
         return users.stream().map(UserMapper::maptoDto).toList();

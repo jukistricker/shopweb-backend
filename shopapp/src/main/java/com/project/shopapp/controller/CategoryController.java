@@ -27,10 +27,10 @@ public class CategoryController {
     public ResponseEntity<ResponseMessageDto> deleteCategoryById(@PathVariable Long id) {
         try {
             categoryService.deleteCategory(id);
-            ResponseMessageDto response = new ResponseMessageDto("Category deleted successfully", id, true);
+            ResponseMessageDto response = new ResponseMessageDto();
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            ResponseMessageDto response = new ResponseMessageDto("Category deletion failed", e.getMessage(), false);
+            ResponseMessageDto response = new ResponseMessageDto();
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }

@@ -45,17 +45,17 @@ public class User {
 
     @CreationTimestamp
     @Column(name = "created_at",nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime created_at = LocalDateTime.now();
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @UpdateTimestamp
     @Column(name = "updated_at",columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
-    private LocalDateTime updated_at;
+    private LocalDateTime updatedAt;
 
     @Column(name = "active",nullable = false, columnDefinition = "BIT(1) DEFAULT b'1'")
     private boolean active = true;
 
     @Column(name = "phone_number", length = 20)
-    private String phone_number;
+    private String phoneNumber;
 
     public enum Role {
         admin, user, seller

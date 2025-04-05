@@ -2,7 +2,6 @@ package com.project.shopapp.controller;
 
 import com.project.shopapp.dto.PurchaseItemDto;
 import com.project.shopapp.entity.Product;
-import com.project.shopapp.entity.PurchaseItem;
 import com.project.shopapp.repository.ProductRepository;
 import com.project.shopapp.service.ProductService;
 import com.project.shopapp.service.PurchaseItemService;

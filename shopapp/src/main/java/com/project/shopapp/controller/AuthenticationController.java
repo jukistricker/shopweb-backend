@@ -2,15 +2,12 @@ package com.project.shopapp.controller;
 
 
 import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.JWSVerifier;
-import com.nimbusds.jose.crypto.MACVerifier;
-import com.project.shopapp.config.JwtProperties;
 import com.project.shopapp.dto.ResponseMessageDto;
 import com.project.shopapp.dto.request.AuthenticationRequest;
 import com.project.shopapp.dto.request.IntrospectRequest;
 import com.project.shopapp.dto.response.AuthenticationResponse;
 import com.project.shopapp.dto.response.IntrospectResponse;
-import com.project.shopapp.service.JwtService;
+import com.project.shopapp.util.JwtUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,17 +21,17 @@ import java.text.ParseException;
 public class AuthenticationController {
 
 
-    private JwtService jwtService;
+    private JwtUtils jwtUtils;
 
     @PostMapping("/token")
     public ResponseEntity<ResponseMessageDto> authenticate(@RequestBody AuthenticationRequest authenticationRequest) {
         try {
-            AuthenticationResponse response = jwtService.login(authenticationRequest);
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Login success",response,true);
+            AuthenticationResponse response = jwtUtils.login(authenticationRequest);
+            ResponseMessageDto responseMessageDto = new ResponseMessageDto();
             return new ResponseEntity<>(responseMessageDto,HttpStatus.OK);
         }
         catch (Exception e) {
-            ResponseMessageDto response = new ResponseMessageDto("Login failed: ",e.getMessage(),false);
+            ResponseMessageDto response = new ResponseMessageDto();
             return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
         }
     }
@@ -43,7 +40,7 @@ public class AuthenticationController {
     public ResponseEntity<IntrospectResponse> authenticate(@RequestBody IntrospectRequest request)
             throws JOSEException, ParseException {
 
-            IntrospectResponse response = jwtService.introspect(request);
+            IntrospectResponse response = jwtUtils.introspect(request);
             if (!response.isValid()){
                 return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
             }
@@ -61,7 +58,7 @@ public class AuthenticationController {
         }
 
         // Gọi service để logout (thêm token vào blacklist)
-        jwtService.logout(token);
+        jwtUtils.logout(token);
 
         // Trả về phản hồi khi logout thành công
         return new ResponseEntity<>("Logout successful", HttpStatus.OK);

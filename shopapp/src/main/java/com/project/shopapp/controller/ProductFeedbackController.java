@@ -2,7 +2,6 @@ package com.project.shopapp.controller;
 
 
 import com.project.shopapp.dto.ProductFeedbackDto;
-import com.project.shopapp.entity.ProductFeedback;
 import com.project.shopapp.service.ProductFeedbackService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

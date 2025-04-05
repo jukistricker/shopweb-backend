@@ -31,13 +31,13 @@ public class UserDto {
 
     private User.Role role;
 
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
-    private LocalDateTime updated_at;
+    private LocalDateTime updatedAt;
 
     private boolean active;
 
-    private String phone_number;
+    private String phoneNumber;
 
 
 }

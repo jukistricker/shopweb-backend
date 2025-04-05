@@ -2,44 +2,19 @@ package com.project.shopapp.mapper;
 
 import com.project.shopapp.dto.ProductDto;
 import com.project.shopapp.entity.Product;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-public class ProductMapper {
+@Mapper(componentModel = "spring", uses = {UserMapper.class, CategoryMapper.class})
+public interface ProductMapper {
+    ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
-    public static ProductDto maptoDto(Product product) {
-        if (product == null) {
-            return null;
-        }
-        return new ProductDto(
-                product.getId(),
-                UserMapper.maptoDto(product.getUser()),
-                product.getProductName(),
-                CategoryMapper.maptoDto(product.getCategory()),
-                product.getDescription(),
-                product.getFeaturedImageUrl(),
-                product.getPrice(),
-                product.getQuantity(),
-                product.getState(),
-                product.getPurchaseCount(),
-                product.getRating(),
-                product.isSale(),
-                product.getSaleEndDate(),
-                product.getSalePrice()
-        );
-    }
+    @Mapping(source = "user", target = "user")
+    @Mapping(source = "category", target = "category")
+    ProductDto maptoDto(Product product);
 
-    public static Product maptoEntity(ProductDto productDto) {
-        if (productDto == null) {
-            return null;
-        }
-        return new Product(
-                productDto.getId(),
-                UserMapper.maptoEntity(productDto.getUser()),
-                productDto.getProductName(),
-                CategoryMapper.maptoEntity(productDto.getCategory()),
-                productDto.getDescription(),
-                productDto.getFeaturedImageUrl(),
-                productDto.getPrice(),
-                productDto.getQuantity()
-        );
-    }
+    @Mapping(source = "user", target = "user")
+    @Mapping(source = "category", target = "category")
+    Product maptoEntity(ProductDto dto);
 }

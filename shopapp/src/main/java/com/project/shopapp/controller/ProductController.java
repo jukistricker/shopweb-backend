@@ -3,7 +3,6 @@ package com.project.shopapp.controller;
 
 import com.project.shopapp.dto.ProductDto;
 import com.project.shopapp.dto.ResponseMessageDto;
-import com.project.shopapp.entity.Product;
 import com.project.shopapp.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,7 +24,7 @@ public class ProductController {
         try {
             System.out.println(productDto);
             ProductDto savedProductDto = productService.createProduct(productDto);
-            ResponseMessageDto response = new ResponseMessageDto("create product success", savedProductDto,true);
+//            ResponseMessageDto response = new ResponseMessageDto("create product success", savedProductDto,true);
             return new ResponseEntity<>(savedProductDto, HttpStatus.CREATED);
         }
         catch (Exception e) {
@@ -39,11 +38,11 @@ public class ProductController {
     public ResponseEntity<ResponseMessageDto> getAllProducts() {
         try {
             List<ProductDto> productDtoList = productService.getAllProducts();
-            ResponseMessageDto response = new ResponseMessageDto("get all product success", productDtoList,true);
+            ResponseMessageDto response = new ResponseMessageDto();
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
         catch (Exception e) {
-            ResponseMessageDto response = new ResponseMessageDto("get all product failed", e.getMessage(), false);
+            ResponseMessageDto response = new ResponseMessageDto();
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
@@ -53,7 +52,7 @@ public class ProductController {
         try {
             ProductDto productDto = productService.getProductById(id);
             if (productDto != null) {
-                ResponseMessageDto response = new ResponseMessageDto("get product success", productDto,true);
+                ResponseMessageDto response = new ResponseMessageDto();
                 return new ResponseEntity<>(productDto, HttpStatus.OK);
             }
             else {
@@ -71,7 +70,7 @@ public class ProductController {
     public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody ProductDto productDto) {
         try {
             ProductDto updatedProductDto = productService.updateProduct(id, productDto);
-            ResponseMessageDto response = new ResponseMessageDto("update product success", updatedProductDto,true);
+            ResponseMessageDto response = new ResponseMessageDto();
             return ResponseEntity.ok(updatedProductDto);
         }
         catch (Exception e) {
@@ -83,11 +82,11 @@ public class ProductController {
     public ResponseEntity<ResponseMessageDto> deleteProduct(@PathVariable Long id) {
         try {
             productService.deleteProduct(id);
-            ResponseMessageDto response = new ResponseMessageDto("delete product success", id,true);
+            ResponseMessageDto response = new ResponseMessageDto();
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
         catch (Exception e) {
-            ResponseMessageDto response = new ResponseMessageDto("delete product failed", e.getMessage(), false);
+            ResponseMessageDto response = new ResponseMessageDto();
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }

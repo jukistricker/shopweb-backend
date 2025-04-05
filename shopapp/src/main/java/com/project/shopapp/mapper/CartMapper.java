@@ -2,28 +2,16 @@ package com.project.shopapp.mapper;
 
 import com.project.shopapp.dto.CartDto;
 import com.project.shopapp.entity.Cart;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-public class CartMapper {
+@Mapper(componentModel = "spring")
+public interface CartMapper {
 
-    public static CartDto maptoDto(Cart cart) {
-        if (cart == null) {
-            return null;
-        }
-        return new CartDto(
-                cart.getId(),
-                UserMapper.maptoDto(cart.getUser())
+    CartMapper INSTANCE = Mappers.getMapper(CartMapper.class);
 
-        );
+    CartDto maptoDto(Cart cart);
 
-    }
-    public static Cart maptoEntity(CartDto cartDto) {
-        if (cartDto == null) {
-            return null;
-        }
-        return new Cart(
-                cartDto.getId(),
-                UserMapper.maptoEntity(cartDto.getUser())
-        );
-    }
-
+    Cart maptoEntity(CartDto cartDto);
 }

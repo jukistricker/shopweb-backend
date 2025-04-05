@@ -26,10 +26,16 @@ server:
   port: 8088
 
 jwt:
-  secret-key: 9T3H3SDQRsgWDizoi6tH5vjE2qKhyBfpGBS470vHXUS12b8jIWPqaYe2UEK665vk
+  secret-key: ACJcBsybik7d+6TOfSNqq1ew5OlFgo6aMYyF7P831vHj4D/fhHGtXxzIsbzaerLm
   issuer: shopapp
   expiration: 3600
   algorithm: HS512
+
+cloudinary:
+  cloud-name: db0sdo295
+  api-key: 398119751511853
+  api-secret: 3wsnWPR7fGUWmueThSSR6Sc70YM
+
 
 
 

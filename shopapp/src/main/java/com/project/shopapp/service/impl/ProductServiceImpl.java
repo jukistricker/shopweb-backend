@@ -7,12 +7,15 @@ import com.project.shopapp.entity.Product;
 import com.project.shopapp.entity.User;
 import com.project.shopapp.mapper.CategoryMapper;
 import com.project.shopapp.mapper.ProductMapper;
+import com.project.shopapp.mapper.ProductMapper;
 import com.project.shopapp.repository.CategoryRepository;
 import com.project.shopapp.repository.ProductRepository;
 import com.project.shopapp.repository.UserRepository;
 import com.project.shopapp.service.ProductService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,6 +29,9 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    @Autowired
+    private ProductMapper productMapper;
+
 
     @Override
     public ProductDto createProduct(ProductDto productDto) {
@@ -45,10 +51,10 @@ public class ProductServiceImpl implements ProductService {
             productDto.setState(Product.ProductState.AVAILABLE);
         }
 
-        Product product = ProductMapper.maptoEntity(productDto);
+        Product product = productMapper.maptoEntity(productDto);
 
 
-        return ProductMapper.maptoDto(productRepository.save(product));
+        return productMapper.maptoDto(productRepository.save(product));
     }
 
     @Override
@@ -106,7 +112,7 @@ public class ProductServiceImpl implements ProductService {
 
         System.out.println(productDto);
 
-        return ProductMapper.maptoDto(productRepository.save(existingproduct));
+        return productMapper.maptoDto(productRepository.save(existingproduct));
     }
 
 
@@ -115,13 +121,13 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto getProductById(Long product_id) {
         Product product = productRepository.findById(product_id)
                 .orElseThrow(()-> new EntityNotFoundException("Product with id: "+product_id+" not found"));
-        return ProductMapper.maptoDto(product);
+        return productMapper.maptoDto(product);
     }
 
     @Override
     public List<ProductDto> getAllProducts() {
         List<Product> products = productRepository.findAll();
-        return products.stream().map(ProductMapper::maptoDto).toList();
+        return products.stream().map(productMapper::maptoDto).toList();
     }
 
     @Override
@@ -137,7 +143,7 @@ public class ProductServiceImpl implements ProductService {
         if (products.isEmpty()){
             return null;
         }
-        return products.stream().map(ProductMapper::maptoDto).toList();
+        return products.stream().map(productMapper::maptoDto).toList();
     }
 
     @Override
@@ -148,7 +154,7 @@ public class ProductServiceImpl implements ProductService {
         if (products.isEmpty()){
             return null;
         }
-        return products.stream().map(ProductMapper::maptoDto).toList();
+        return products.stream().map(productMapper::maptoDto).toList();
     }
 
     public List<ProductDto> searchProducts(String query) {
@@ -161,7 +167,7 @@ public class ProductServiceImpl implements ProductService {
         List<Product> products = productRepository.searchProductsByName(query);
 
 
-        return products.stream().map(ProductMapper::maptoDto).toList();
+        return products.stream().map(productMapper::maptoDto).toList();
     }
 
 }

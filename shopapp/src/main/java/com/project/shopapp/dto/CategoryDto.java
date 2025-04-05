@@ -14,7 +14,7 @@ import lombok.*;
 public class CategoryDto {
     private Long id;
 
-    private String cate_name;
+    private String cateName;
 
     private String description;
 

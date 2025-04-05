@@ -22,12 +22,12 @@ public class VariantAttributeController {
         try {
             System.out.println(dto);
             VariantAttributeDto createdAttribute = productVariantSerivce.createAttribute(dto);
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Create attribute successfully",createdAttribute,true);
+            ResponseMessageDto responseMessageDto = new ResponseMessageDto();
             return new ResponseEntity<>(createdAttribute, HttpStatus.CREATED);
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Create attribute failed",e.getMessage(),false);
+            ResponseMessageDto responseMessageDto = new ResponseMessageDto();
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
@@ -36,12 +36,12 @@ public class VariantAttributeController {
     public ResponseEntity<VariantAttributeDto> updateAttribute(@Validated @PathVariable("id") Long id,@RequestBody VariantAttributeDto variantAttributeDto) {
         try {
             VariantAttributeDto updatedAttribute = productVariantSerivce.updateAttribute(id, variantAttributeDto);
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Update attribute successfully",updatedAttribute,true);
+            ResponseMessageDto responseMessageDto = new ResponseMessageDto();
             return new ResponseEntity<>(updatedAttribute, HttpStatus.OK);
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Update attribute failed",e.getMessage(),false);
+            ResponseMessageDto responseMessageDto = new ResponseMessageDto();
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
@@ -50,12 +50,12 @@ public class VariantAttributeController {
     public ResponseEntity<VariantAttributeDto> getAttributeById(@PathVariable("id") Long id) {
         try {
             VariantAttributeDto variantAttributeDto = productVariantSerivce.getAttribute(id);
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Get attribute successfully",variantAttributeDto,true);
+            ResponseMessageDto responseMessageDto = new ResponseMessageDto();
             return new ResponseEntity<>(variantAttributeDto, HttpStatus.OK);
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Get attribute failed",e.getMessage(),false);
+            ResponseMessageDto responseMessageDto = new ResponseMessageDto();
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
@@ -64,12 +64,12 @@ public class VariantAttributeController {
     public ResponseEntity<List<VariantAttributeDto>> getAllAttributes(@PathVariable Long id) {
         try {
             List<VariantAttributeDto> allAttributes = productVariantSerivce.getAllAttributes(id);
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Get all attributes successfully",allAttributes,true);
+            ResponseMessageDto responseMessageDto = new ResponseMessageDto();
             return new ResponseEntity<>(allAttributes, HttpStatus.OK);
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Get all attributes failed",e.getMessage(),false);
+            ResponseMessageDto responseMessageDto = new ResponseMessageDto();
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
@@ -78,11 +78,11 @@ public class VariantAttributeController {
     public ResponseEntity<ResponseMessageDto> deleteAttribute(@PathVariable("id") Long id) {
         try {
             productVariantSerivce.deleteAttribute(id);
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Delete attribute successfully",id,true);
+            ResponseMessageDto responseMessageDto = new ResponseMessageDto();
             return new ResponseEntity<>(responseMessageDto, HttpStatus.OK);
         }
         catch (Exception e) {
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Delete attribute failed",e.getMessage(),false);
+            ResponseMessageDto responseMessageDto = new ResponseMessageDto();
             return new ResponseEntity<>(responseMessageDto, HttpStatus.BAD_REQUEST);
         }
     }
