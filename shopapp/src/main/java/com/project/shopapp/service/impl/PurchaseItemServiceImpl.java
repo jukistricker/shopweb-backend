@@ -20,14 +20,15 @@ import java.util.List;
 public class PurchaseItemServiceImpl implements PurchaseItemService {
     private final PurchaseItemRepository purchaseItemRepository;
     private final PurchaseRepository purchaseRepository;
+    private final PurchaseItemMapper purchaseItemMapper;
 
     @Override
     public PurchaseItemDto createPurchaseItem(PurchaseItemDto purchaseItemDto){
         if (!purchaseItemDto.isRated()){
             purchaseItemDto.setRated(false);
         }
-        PurchaseItem purchaseItem = PurchaseItemMapper.maptoEntity(purchaseItemDto);
-        return PurchaseItemMapper.maptoDto(purchaseItemRepository.save(purchaseItem));
+        PurchaseItem purchaseItem = purchaseItemMapper.maptoEntity(purchaseItemDto);
+        return purchaseItemMapper.maptoDto(purchaseItemRepository.save(purchaseItem));
     }
 
     @Override
@@ -38,7 +39,7 @@ public class PurchaseItemServiceImpl implements PurchaseItemService {
             existingPurchaseItem.setRated(false);
         }
         existingPurchaseItem.setRated(true);
-        return PurchaseItemMapper.maptoDto(purchaseItemRepository.save(existingPurchaseItem));
+        return purchaseItemMapper.maptoDto(purchaseItemRepository.save(existingPurchaseItem));
 
     }
 
@@ -49,7 +50,7 @@ public class PurchaseItemServiceImpl implements PurchaseItemService {
     public PurchaseItemDto getPurchaseItemById(Long id){
         PurchaseItem purchaseItem = purchaseItemRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Purchase Item Not Found"));
-        return PurchaseItemMapper.maptoDto(purchaseItem);
+        return purchaseItemMapper.maptoDto(purchaseItem);
     }
 
     @Override
@@ -57,7 +58,7 @@ public class PurchaseItemServiceImpl implements PurchaseItemService {
         Purchase purchase = purchaseRepository.findById(purchaseId)
                 .orElseThrow(()-> new EntityNotFoundException("Purchase Not Found"));
         List<PurchaseItem> purchaseItems = purchaseItemRepository.findByPurchase(purchase);
-        return purchaseItems.stream().map(PurchaseItemMapper::maptoDto).toList();
+        return purchaseItems.stream().map(purchaseItemMapper::maptoDto).toList();
     }
 
 }

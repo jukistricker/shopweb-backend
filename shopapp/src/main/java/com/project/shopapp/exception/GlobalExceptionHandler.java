@@ -1,6 +1,9 @@
 package com.project.shopapp.exception;
 
+import com.project.shopapp.constants.ApiConstants;
+import com.project.shopapp.dto.Meta;
 import com.project.shopapp.dto.ResponseMessageDto;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +20,15 @@ public class GlobalExceptionHandler {
     }
 
     // Xử lý lỗi khi không tìm thấy dữ liệu
-    @ExceptionHandler(ChangeSetPersister.NotFoundException.class)
-    public ResponseEntity<ResponseMessageDto> handleNotFoundException(ChangeSetPersister.NotFoundException ex) {
-        return buildErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+    @ExceptionHandler({EntityNotFoundException.class, ChangeSetPersister.NotFoundException.class})
+    public ResponseEntity<ResponseMessageDto> handleNotFoundExceptions(Exception ex) {
+        ResponseMessageDto res = new ResponseMessageDto(
+                new Meta(StatusCode.Error404, MessageResource.NOT_FOUND),
+                ex.getMessage()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
     }
+
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ResponseMessageDto> handleIllegalArgumentException(IllegalArgumentException ex) {
@@ -29,13 +37,21 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ResponseMessageDto> handleValidationException(MethodArgumentNotValidException ex) {
-        String errorMessage = ex.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
-        return buildErrorResponse(HttpStatus.BAD_REQUEST, errorMessage);
+        ResponseMessageDto res= new ResponseMessageDto(
+                new Meta(StatusCode.Error400, MessageResource.ERROR_400_MESSAGE),
+                ex.getBindingResult().getFieldErrors().get(0).getDefaultMessage()
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
     }
 
     // Xử lý lỗi chung cho toàn bộ hệ thống
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseMessageDto> handleGlobalException(Exception ex) {
-        return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+    ResponseMessageDto res = new ResponseMessageDto(
+            new Meta(StatusCode.Error500,  ex.getMessage()),
+            ex.getMessage()
+    );
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
     }
+
 }

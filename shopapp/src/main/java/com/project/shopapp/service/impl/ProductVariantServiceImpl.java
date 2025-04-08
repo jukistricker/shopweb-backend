@@ -24,11 +24,13 @@ public class ProductVariantServiceImpl implements ProductVariantSerivce {
     private final ProductVariantRepository productVariantRepository;
     private final VariantAttributeRepository variantAttributeRepository;
     private final ProductRepository productRepository;
+    private final ProductVariantMapper productVariantMapper;
+    private final VariantAttributeMapper variantAttributeMapper;
 
     @Override
     public ProductVariantDto createVariant(ProductVariantDto productVariantDto) {
-        ProductVariant newProductVariant = ProductVariantMapper.maptoEntity(productVariantDto);
-        return ProductVariantMapper.maptoDto(productVariantRepository.save(newProductVariant));
+        ProductVariant newProductVariant = productVariantMapper.maptoEntity(productVariantDto);
+        return productVariantMapper.maptoDto(productVariantRepository.save(newProductVariant));
     }
 
     @Override
@@ -36,7 +38,7 @@ public class ProductVariantServiceImpl implements ProductVariantSerivce {
         ProductVariant productVariant = productVariantRepository
                 .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Product variant not found with id: " + id));
-        return ProductVariantMapper.maptoDto(productVariant);
+        return productVariantMapper.maptoDto(productVariant);
     }
 
     @Override
@@ -46,7 +48,7 @@ public class ProductVariantServiceImpl implements ProductVariantSerivce {
         if (productVariants.isEmpty()) {
             return null;
         }
-        return productVariants.stream().map(ProductVariantMapper::maptoDto).toList();
+        return productVariants.stream().map(productVariantMapper::maptoDto).toList();
     }
 
     @Override
@@ -61,14 +63,14 @@ public class ProductVariantServiceImpl implements ProductVariantSerivce {
     public VariantAttributeDto getAttribute(Long id) {
         VariantAttribute variantAttribute = variantAttributeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Variant attribute not found with id: " + id));
-        return VariantAttributeMapper.maptoDto(variantAttribute);
+        return variantAttributeMapper.maptoDto(variantAttribute);
 
     }
 
     @Override
     public VariantAttributeDto createAttribute(VariantAttributeDto variantAttributeDto) {
-        VariantAttribute newVariantAttribute = VariantAttributeMapper.maptoEntity(variantAttributeDto);
-        return VariantAttributeMapper.maptoDto(variantAttributeRepository.save(newVariantAttribute));
+        VariantAttribute newVariantAttribute = variantAttributeMapper.maptoEntity(variantAttributeDto);
+        return variantAttributeMapper.maptoDto(variantAttributeRepository.save(newVariantAttribute));
     }
 
     @Override
@@ -80,7 +82,7 @@ public class ProductVariantServiceImpl implements ProductVariantSerivce {
                 .findByProductVariant(productVariant);
         System.out.println(variantAttributes);
         return variantAttributes.stream()
-                .map(VariantAttributeMapper::maptoDto).toList();
+                .map(variantAttributeMapper::maptoDto).toList();
     }
 
     @Override
@@ -93,7 +95,7 @@ public class ProductVariantServiceImpl implements ProductVariantSerivce {
         existingAtt.setAttName(variantAttributeDto.getAttName()); // Cập nhật tên thuộc tính từ DTO
 
         // Lưu lại đối tượng đã cập nhật vào database và trả về DTO tương ứng
-        return VariantAttributeMapper.maptoDto(variantAttributeRepository.save(existingAtt));
+        return variantAttributeMapper.maptoDto(variantAttributeRepository.save(existingAtt));
     }
 
     @Override

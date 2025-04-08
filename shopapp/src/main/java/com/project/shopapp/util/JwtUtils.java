@@ -5,6 +5,7 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import com.project.shopapp.aspect.Loggable;
 import com.project.shopapp.config.JwtProperties;
 import com.project.shopapp.dto.UserDto;
 import com.project.shopapp.dto.base.UserClaims;
@@ -19,6 +20,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -41,20 +43,20 @@ public class JwtUtils {
         this.userRepository = userRepository;
     }
 
-
+    @Loggable("Đăng nhập")
     public AuthenticationResponse login(AuthenticationRequest authenticationRequest){
         if (authenticationRequest.getEmail()== null || authenticationRequest.getEmail().isEmpty()){
-            throw new EntityNotFoundException("Email or password is empty");
+      throw new IllegalArgumentException("Email or password is empty");
         }
         if (authenticationRequest.getPassword()== null || authenticationRequest.getPassword().isEmpty()){
-            throw new EntityNotFoundException("Email or password is empty");
+            throw new IllegalArgumentException("Email or password is empty");
         }
         User user = userRepository.findByEmail(authenticationRequest.getEmail())
                 .orElseThrow(()-> new EntityNotFoundException("Email not found") );
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         boolean authenticated = passwordEncoder.matches(authenticationRequest.getPassword(), user.getPassword());
         if (!authenticated){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "email or password is incorrect");
+      throw new BadCredentialsException("email or password is incorrect");
         }
 
 
@@ -98,6 +100,7 @@ public class JwtUtils {
         }
     }
 
+    @Loggable("Check token")
     public IntrospectResponse introspect(IntrospectRequest request)
             throws JOSEException, ParseException {
 
@@ -148,6 +151,7 @@ public class JwtUtils {
                 .build();
     }
 
+    @Loggable("Đăng xuất")
     public void logout(String token) {
         // Thêm token vào blacklist
         blacklist.add(token);

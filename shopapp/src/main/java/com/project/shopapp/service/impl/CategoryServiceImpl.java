@@ -19,33 +19,34 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final CategoryMapper categoryMapper;
 
     @Override
     public CategoryDto createCategory(CategoryDto categoryDto){
         System.out.println("categoryDto "+categoryDto);
-        Category category = CategoryMapper.maptoEntity(categoryDto);
+        Category category = categoryMapper.maptoEntity(categoryDto);
         System.out.println("category "+category);
-        return CategoryMapper.maptoDto(categoryRepository.save(category));
+        return categoryMapper.maptoDto(categoryRepository.save(category));
     }
 
     @Override
     public CategoryDto updateCategory(Long id, CategoryDto categoryDto){
         Category existingCategory = categoryRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("category not found"));
-        existingCategory.setCate_name(categoryDto.getCate_name());
+        existingCategory.setCateName(categoryDto.getCateName());
         existingCategory.setDescription(categoryDto.getDescription());
-        return CategoryMapper.maptoDto(categoryRepository.save(existingCategory));
+        return categoryMapper.maptoDto(categoryRepository.save(existingCategory));
     }
 
     @Override
     public CategoryDto getCategoryById(Long id){
         Category category = categoryRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("category not found"));
-        return CategoryMapper.maptoDto(category);
+        return categoryMapper.maptoDto(category);
     }
 
     @Override
     public List<CategoryDto> getAllCategories(){
         List<Category> categories = categoryRepository.findAll();
-        return categories.stream().map(CategoryMapper::maptoDto).toList();
+        return categories.stream().map(categoryMapper::maptoDto).toList();
     }
 
     @Override

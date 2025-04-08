@@ -24,6 +24,8 @@ public class ProductFeedbackServiceImpl implements ProductFeedbackService {
     private  final ProductFeedbackRepository productFeedbackRepository;
     private final ProductRepository productRepository;
     private final PurchaseItemRepository purchaseItemRepository;
+    private final ProductFeedbackMapper productFeedbackMapper;
+    private final ProductMapper productMapper;
 
     @Override
     public ProductFeedbackDto createFeedback(ProductFeedbackDto productFeedbackDto){
@@ -32,11 +34,11 @@ public class ProductFeedbackServiceImpl implements ProductFeedbackService {
                             .orElseThrow(()-> new EntityNotFoundException("Item not found"));
             Product product = productRepository.findById(purchaseItem.getProduct().getId())
                     .orElseThrow(()-> new EntityNotFoundException("Product not found"));
-            productFeedbackDto.setProduct(ProductMapper.maptoDto(product));
+            productFeedbackDto.setProduct(productMapper.maptoDto(product));
         }
-        ProductFeedback newProductFeedback = ProductFeedbackMapper.maptoEntity(productFeedbackDto);
+        ProductFeedback newProductFeedback = productFeedbackMapper.maptoEntity(productFeedbackDto);
 
-        return ProductFeedbackMapper.maptoDto(productFeedbackRepository.save(newProductFeedback));
+        return productFeedbackMapper.maptoDto(productFeedbackRepository.save(newProductFeedback));
     }
 
     @Override
@@ -45,14 +47,14 @@ public class ProductFeedbackServiceImpl implements ProductFeedbackService {
                 .orElseThrow(()-> new EntityNotFoundException("feedback not found"));
         existingFeedback.setRate(productFeedbackDto.getRate());
         existingFeedback.setFeedback(productFeedbackDto.getFeedback());
-        return ProductFeedbackMapper.maptoDto(productFeedbackRepository.save(existingFeedback));
+        return productFeedbackMapper.maptoDto(productFeedbackRepository.save(existingFeedback));
     }
 
     @Override
     public List<ProductFeedbackDto> getFeedbackByProductId(Long id){
         Product product = productRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("product not found"));
         List<ProductFeedback> productFeedbacks = productFeedbackRepository.findByProduct(product).stream().toList();
-        return productFeedbacks.stream().map(ProductFeedbackMapper::maptoDto).toList();
+        return productFeedbacks.stream().map(productFeedbackMapper::maptoDto).toList();
 
     }
 

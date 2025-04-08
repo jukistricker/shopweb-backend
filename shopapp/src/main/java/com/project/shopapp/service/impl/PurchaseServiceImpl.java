@@ -23,11 +23,13 @@ public class PurchaseServiceImpl implements PurchaseService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final PaymentRepository paymentRepository;
+    private final PurchaseMapper purchaseMapper;
+    private final PaymentMapper paymentMapper;
 
     @Override
     public PurchaseDto createPurchase(PurchaseDto purchaseDto) {
-        Purchase purchase = PurchaseMapper.maptoEntity(purchaseDto);
-        return PurchaseMapper.maptoDto(purchaseRepository.save(purchase));
+        Purchase purchase = purchaseMapper.maptoEntity(purchaseDto);
+        return purchaseMapper.maptoDto(purchaseRepository.save(purchase));
     }
 
     @Override
@@ -35,15 +37,15 @@ public class PurchaseServiceImpl implements PurchaseService {
         Purchase existPurchase = purchaseRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Purchase not found"));
 
-        existPurchase.setPayment(PaymentMapper.maptoEntity(purchaseDto.getPayment()));
-        return PurchaseMapper.maptoDto(purchaseRepository.save(existPurchase));
+        existPurchase.setPayment(paymentMapper.maptoEntity(purchaseDto.getPayment()));
+        return purchaseMapper.maptoDto(purchaseRepository.save(existPurchase));
     }
 
     @Override
     public PurchaseDto getPurchase(Long id){
         Purchase existedPurchase = purchaseRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Purchase not found"));
-        return PurchaseMapper.maptoDto(existedPurchase);
+        return purchaseMapper.maptoDto(existedPurchase);
     }
 
 
@@ -54,7 +56,7 @@ public class PurchaseServiceImpl implements PurchaseService {
                 .orElseThrow(()-> new EntityNotFoundException("User not found"));
 
         List<Purchase> purchases = purchaseRepository.findByUser(user);
-        return purchases.stream().map(PurchaseMapper::maptoDto).toList();
+        return purchases.stream().map(purchaseMapper::maptoDto).toList();
     }
 
 

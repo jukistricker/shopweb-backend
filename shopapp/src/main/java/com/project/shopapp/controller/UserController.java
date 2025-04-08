@@ -28,13 +28,8 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<ResponseMessageDto> createUser(@RequestBody UserDto userDto) {
         try {
-            UserDto savedUser = userService.createUser(userDto);
-            ResponseMessageDto response = new ResponseMessageDto();
-            CartDto cartDto = new CartDto();
-            cartDto.setUser(savedUser);
-            cartService.createCart(cartDto);
-            System.out.println(cartDto);
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
+            ResponseMessageDto res = userService.createUser(userDto);
+            return new ResponseEntity<>(res, HttpStatus.CREATED);
         }
         catch (Exception e) {
             ResponseMessageDto response = new ResponseMessageDto();

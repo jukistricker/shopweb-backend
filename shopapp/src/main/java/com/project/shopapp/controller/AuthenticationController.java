@@ -25,15 +25,11 @@ public class AuthenticationController {
 
     @PostMapping("/token")
     public ResponseEntity<ResponseMessageDto> authenticate(@RequestBody AuthenticationRequest authenticationRequest) {
-        try {
+
             AuthenticationResponse response = jwtUtils.login(authenticationRequest);
             ResponseMessageDto responseMessageDto = new ResponseMessageDto();
             return new ResponseEntity<>(responseMessageDto,HttpStatus.OK);
-        }
-        catch (Exception e) {
-            ResponseMessageDto response = new ResponseMessageDto();
-            return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
-        }
+
     }
 
     @PostMapping("/introspect")

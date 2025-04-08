@@ -72,7 +72,7 @@ public class CategoryController {
         }
         catch (Exception e) {
             CategoryDto errorCategory = new CategoryDto();  // Tạo một CategoryDto rỗng hoặc với thông tin lỗi.
-            errorCategory.setCate_name("Error creating category");
+            errorCategory.setCateName("Error creating category");
             errorCategory.setDescription(e.getMessage());
 
             System.out.println("error: " + e.getMessage());
@@ -88,7 +88,7 @@ public class CategoryController {
         }
         catch (Exception e) {
             CategoryDto errorCategory = new CategoryDto();  // Tạo một CategoryDto rỗng hoặc với thông tin lỗi.
-            errorCategory.setCate_name("Error creating category");
+            errorCategory.setCateName("Error creating category");
             errorCategory.setDescription(e.getMessage());
 
             System.out.println("error: " + e.getMessage());

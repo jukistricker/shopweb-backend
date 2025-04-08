@@ -15,15 +15,17 @@ import java.util.List;
 @AllArgsConstructor
 public class CartServiceImpl implements CartService {
     private final CartRepository cartRepository;
+    private final CartMapper cartMapper;
+
     @Override
     public CartDto createCart(CartDto cartDto) {
-        Cart cart = cartRepository.save(CartMapper.maptoEntity(cartDto));
-        return CartMapper.maptoDto(cart);
+        Cart cart = cartRepository.save(cartMapper.maptoEntity(cartDto));
+        return cartMapper.maptoDto(cart);
     }
     @Override
     public List<CartDto> findAll() {
         List<Cart> carts = cartRepository.findAll();
-        return carts.stream().map(CartMapper::maptoDto).toList();
+        return carts.stream().map(cartMapper::maptoDto).toList();
     }
 
     @Override
@@ -34,7 +36,7 @@ public class CartServiceImpl implements CartService {
             throw new EntityNotFoundException("Cart not found");
         }
 
-        return CartMapper.maptoDto(cart);
+        return cartMapper.maptoDto(cart);
     }
 
 

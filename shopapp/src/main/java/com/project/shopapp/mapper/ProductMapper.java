@@ -8,8 +8,6 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring", uses = {UserMapper.class, CategoryMapper.class})
 public interface ProductMapper {
-    ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
-
     @Mapping(source = "user", target = "user")
     @Mapping(source = "category", target = "category")
     ProductDto maptoDto(Product product);
@@ -18,3 +16,4 @@ public interface ProductMapper {
     @Mapping(source = "category", target = "category")
     Product maptoEntity(ProductDto dto);
 }
+

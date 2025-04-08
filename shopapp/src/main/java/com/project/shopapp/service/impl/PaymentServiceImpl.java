@@ -17,12 +17,13 @@ import java.util.stream.Collectors;
 public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentRepository paymentRepository;
+    private final PaymentMapper paymentMapper;
 
     @Override
     public PaymentDto createPayment(PaymentDto paymentDto) {
-        Payment payment = PaymentMapper.maptoEntity(paymentDto);
+        Payment payment = paymentMapper.maptoEntity(paymentDto);
         Payment savedPayment = paymentRepository.save(payment);
-        return PaymentMapper.maptoDto(savedPayment);
+        return paymentMapper.maptoDto(savedPayment);
     }
 
     @Override
@@ -32,14 +33,14 @@ public class PaymentServiceImpl implements PaymentService {
 
         existingPayment.setPayName(paymentDto.getPayName());
         Payment updatedPayment = paymentRepository.save(existingPayment);
-        return PaymentMapper.maptoDto(updatedPayment);
+        return paymentMapper.maptoDto(updatedPayment);
     }
 
     @Override
     public PaymentDto getPayment(Long id) {
         Payment payment = paymentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Payment not found with id: " + id));
-        return PaymentMapper.maptoDto(payment);
+        return paymentMapper.maptoDto(payment);
     }
 
     @Override
@@ -54,7 +55,7 @@ public class PaymentServiceImpl implements PaymentService {
     public List<PaymentDto> getPayments() {
         List<Payment> payments = paymentRepository.findAll();
         return payments.stream()
-                .map(PaymentMapper::maptoDto)
+                .map(paymentMapper::maptoDto)
                 .collect(Collectors.toList());
     }
 }

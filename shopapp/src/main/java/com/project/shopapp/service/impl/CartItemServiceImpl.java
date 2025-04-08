@@ -20,26 +20,30 @@ public class CartItemServiceImpl implements CartItemService {
 
     private final CartItemRepository cartItemRepository;
     private final CartRepository cartRepository;
+    private final CartMapper cartMapper;
+    private final VariantAttributeMapper variantAttributeMapper;
+    private final CartItemMapper cartItemMapper;
+    private final ProductMapper productMapper;
 
     @Override
     public CartItemDto createCartItem(CartItemDto cartItemDto) {
 
         CartItem cartItem = cartItemRepository.findByCartAndProductAndAttribute(
-                CartMapper.maptoEntity(cartItemDto.getCart()),
-                ProductMapper.maptoEntity(cartItemDto.getProduct()),
-                VariantAttributeMapper.maptoEntity(cartItemDto.getVariantAttribute())
+                cartMapper.maptoEntity(cartItemDto.getCart()),
+                productMapper.maptoEntity(cartItemDto.getProduct()),
+                variantAttributeMapper.maptoEntity(cartItemDto.getVariantAttribute())
         );
 
         if (cartItem != null) {
 
             cartItem.setQuantity(cartItem.getQuantity() + cartItemDto.getQuantity());
             CartItem updatedCartItem = cartItemRepository.save(cartItem);
-            return CartItemMapper.maptoDto(updatedCartItem);
+            return cartItemMapper.maptoDto(updatedCartItem);
         } else {
 
-            CartItem newCartItem = CartItemMapper.maptoEntity(cartItemDto);
+            CartItem newCartItem = cartItemMapper.maptoEntity(cartItemDto);
             CartItem savedCartItem = cartItemRepository.save(newCartItem);
-            return CartItemMapper.maptoDto(savedCartItem);
+            return cartItemMapper.maptoDto(savedCartItem);
         }
     }
 
@@ -51,17 +55,17 @@ public class CartItemServiceImpl implements CartItemService {
                 .orElseThrow(() -> new RuntimeException("CartItem not found with ID: " + id));
 
         existingCartItem.setQuantity(cartItemDto.getQuantity());
-        existingCartItem.setAttribute(VariantAttributeMapper.maptoEntity(cartItemDto.getVariantAttribute()));
+        existingCartItem.setAttribute(variantAttributeMapper.maptoEntity(cartItemDto.getVariantAttribute()));
 
 
-        return CartItemMapper.maptoDto(cartItemRepository.save(existingCartItem));
+        return cartItemMapper.maptoDto(cartItemRepository.save(existingCartItem));
     }
 
     @Override
     public CartItemDto getCartItem(Long id) {
         CartItem cartItem = cartItemRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("CartItem not found with ID: " + id));
-        return CartItemMapper.maptoDto(cartItem);
+        return cartItemMapper.maptoDto(cartItem);
     }
 
     @Override
@@ -79,7 +83,7 @@ public class CartItemServiceImpl implements CartItemService {
 
         List<CartItem> cartItems = cartItemRepository.findByCart(cart);
         return cartItems.stream()
-                .map(CartItemMapper::maptoDto)
+                .map(cartItemMapper::maptoDto)
                 .collect(Collectors.toList());
     }
 }

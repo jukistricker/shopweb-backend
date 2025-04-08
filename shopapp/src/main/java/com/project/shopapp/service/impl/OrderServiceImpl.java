@@ -20,11 +20,12 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
+    private final OrderMapper orderMapper;
 
     @Override
     public OrderDto createOrder(OrderDto orderDto) {
-        Order order = OrderMapper.maptoEntity(orderDto);
-        return OrderMapper.maptoDto(orderRepository.save(order));
+        Order order = orderMapper.maptoEntity(orderDto);
+        return orderMapper.maptoDto(orderRepository.save(order));
     }
 
     @Override
@@ -38,14 +39,14 @@ public class OrderServiceImpl implements OrderService {
         existingOrder.setAddress(orderDto.getAddress());
 
 
-        return OrderMapper.maptoDto(orderRepository.save(existingOrder));
+        return orderMapper.maptoDto(orderRepository.save(existingOrder));
     }
 
     @Override
     public OrderDto getOrder(Long id) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Order not found with id " + id));
-        return OrderMapper.maptoDto(order);
+        return orderMapper.maptoDto(order);
     }
 
     @Override
@@ -53,7 +54,7 @@ public class OrderServiceImpl implements OrderService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id " + userId));
         List<Order> orders = orderRepository.findByUser(user);
-        return orders.stream().map(OrderMapper::maptoDto).toList();
+        return orders.stream().map(orderMapper::maptoDto).toList();
     }
 
     @Override
