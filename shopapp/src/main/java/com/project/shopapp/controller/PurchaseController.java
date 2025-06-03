@@ -1,6 +1,8 @@
 package com.project.shopapp.controller;
 
 import com.project.shopapp.dto.PurchaseDto;
+import com.project.shopapp.dto.request.PurchaseRequest;
+import com.project.shopapp.entity.PurchaseItem;
 import com.project.shopapp.service.PurchaseService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -19,9 +21,9 @@ public class PurchaseController {
     private PurchaseService purchaseService;
 
     @PostMapping("/create")
-    public ResponseEntity<PurchaseDto> create(@Valid @RequestBody PurchaseDto purchaseDto) {
+    public ResponseEntity<PurchaseDto> create(@Valid @RequestBody PurchaseRequest purchaseRequest) {
         try {
-            PurchaseDto createdPurchase = purchaseService.createPurchase(purchaseDto);
+            PurchaseDto createdPurchase = purchaseService.createPurchase(purchaseRequest);
             return new ResponseEntity<>(createdPurchase, HttpStatus.CREATED);
         }
         catch (Exception e) {

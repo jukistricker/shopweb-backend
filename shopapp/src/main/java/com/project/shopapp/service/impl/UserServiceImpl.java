@@ -1,7 +1,7 @@
 package com.project.shopapp.service.impl;
 
 import com.project.shopapp.aspect.Loggable;
-import com.project.shopapp.constants.ApiConstants;
+import com.project.shopapp.constants.ApiConstants.*;
 import com.project.shopapp.dto.CartDto;
 import com.project.shopapp.dto.Meta;
 import com.project.shopapp.dto.ResponseMessageDto;
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
 
     ResponseMessageDto res =
         new ResponseMessageDto(
-            new Meta(ApiConstants.StatusCode.Success200,
+            new Meta(StatusCode.Success200,
                     "Đăng ký thành công"),
                 savedUser);
 
@@ -115,10 +115,15 @@ public class UserServiceImpl implements UserService {
     return userMapper.maptoDto(user);
   }
 
+  @Loggable("Lấy danh sách người dùng")
   @Override
-  public List<UserDto> getAllUsers() {
+  public ResponseMessageDto getAllUsers() {
     List<User> users = userRepository.findAll();
-    return users.stream().map(userMapper::maptoDto).toList();
+    ResponseMessageDto res = new ResponseMessageDto(
+            new Meta(StatusCode.Success200,"Lấy danh sách người dùng thành công"),
+            users.stream().map(userMapper::maptoDto).toList()
+    );
+    return res;
   }
 
   @Override

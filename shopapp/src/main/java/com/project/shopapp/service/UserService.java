@@ -11,7 +11,7 @@ import java.util.List;
 public interface UserService {
     ResponseMessageDto createUser(UserDto userDto);
     UserDto getUserById(Long id);
-    List<UserDto> getAllUsers();
+    ResponseMessageDto getAllUsers();
     UserDto updateUser(Long id,UserDto userDto);
     void deleteUserById(Long id);
     UserDto getByEmail(String email);

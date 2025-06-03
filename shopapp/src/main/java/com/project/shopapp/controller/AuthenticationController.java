@@ -2,6 +2,8 @@ package com.project.shopapp.controller;
 
 
 import com.nimbusds.jose.JOSEException;
+import com.project.shopapp.constants.ApiConstants.*;
+import com.project.shopapp.dto.Meta;
 import com.project.shopapp.dto.ResponseMessageDto;
 import com.project.shopapp.dto.request.AuthenticationRequest;
 import com.project.shopapp.dto.request.IntrospectRequest;
@@ -27,7 +29,11 @@ public class AuthenticationController {
     public ResponseEntity<ResponseMessageDto> authenticate(@RequestBody AuthenticationRequest authenticationRequest) {
 
             AuthenticationResponse response = jwtUtils.login(authenticationRequest);
-            ResponseMessageDto responseMessageDto = new ResponseMessageDto();
+    ResponseMessageDto responseMessageDto = new ResponseMessageDto(
+            new Meta(
+                    StatusCode.Success200,
+                    "Đăng nhập thành công"
+            ),response);
             return new ResponseEntity<>(responseMessageDto,HttpStatus.OK);
 
     }

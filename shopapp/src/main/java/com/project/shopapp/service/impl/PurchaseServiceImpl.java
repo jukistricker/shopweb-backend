@@ -1,20 +1,25 @@
 package com.project.shopapp.service.impl;
 
 import com.project.shopapp.dto.PurchaseDto;
+import com.project.shopapp.dto.request.PurchaseRequest;
+import com.project.shopapp.entity.Product;
 import com.project.shopapp.entity.Purchase;
+import com.project.shopapp.entity.PurchaseItem;
 import com.project.shopapp.entity.User;
 import com.project.shopapp.mapper.PaymentMapper;
 import com.project.shopapp.mapper.PurchaseMapper;
-import com.project.shopapp.repository.OrderRepository;
-import com.project.shopapp.repository.PaymentRepository;
-import com.project.shopapp.repository.PurchaseRepository;
-import com.project.shopapp.repository.UserRepository;
+import com.project.shopapp.repository.*;
+import com.project.shopapp.service.ProductService;
 import com.project.shopapp.service.PurchaseService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -25,11 +30,49 @@ public class PurchaseServiceImpl implements PurchaseService {
     private final PaymentRepository paymentRepository;
     private final PurchaseMapper purchaseMapper;
     private final PaymentMapper paymentMapper;
+    private final ProductRepository productRepository;
+    private final PurchaseItemRepository purchaseItemRepository;
 
+
+    @Transactional()
     @Override
-    public PurchaseDto createPurchase(PurchaseDto purchaseDto) {
-        Purchase purchase = purchaseMapper.maptoEntity(purchaseDto);
-        return purchaseMapper.maptoDto(purchaseRepository.save(purchase));
+    public PurchaseDto createPurchase(PurchaseRequest purchaseRequest) {
+
+        if(purchaseRequest.getItems().isEmpty()){
+            throw new IllegalArgumentException("Purchase items must have at least one item");
+        }
+        if(!orderRepository.existsById(purchaseRequest.getPurchase().getOrder().getId())){
+            throw new EntityNotFoundException("Order not found");
+        }
+
+        if(!userRepository.existsById(purchaseRequest.getPurchase().getUser().getId())){
+            throw new EntityNotFoundException("User not found");
+        }
+
+        Purchase purchase = purchaseMapper.maptoEntity(purchaseRequest.getPurchase());
+        purchase.setTotalPrice(BigDecimal.ZERO);
+
+
+        for (PurchaseItem item : purchaseRequest.getItems()) {
+            Product product = productRepository.findById(item.getProduct().getId())
+                    .orElseThrow(EntityNotFoundException::new);
+            if(item.getQuantity()>product.getQuantity()){
+                throw new IllegalArgumentException("Quantity is greater than product quantity");
+            }
+            item.setPurchase(purchase);
+            item.setProduct(product);
+            product.setQuantity(product.getQuantity()-item.getQuantity());
+            item.setRated(false);
+            item.setAttribute(item.getAttribute());
+
+            BigDecimal itemTotal = product.getPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
+            purchase.setTotalPrice(purchase.getTotalPrice().add(itemTotal));
+            productRepository.save(product);
+            purchaseItemRepository.save(item);
+        }
+        purchaseRepository.save(purchase);
+
+    return purchaseMapper.maptoDto(purchase);
     }
 
     @Override
