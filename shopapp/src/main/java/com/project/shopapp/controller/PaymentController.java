@@ -66,15 +66,17 @@ public class PaymentController {
         }
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ResponseMessageDto> deletePayment(@PathVariable Long id) {
-        try {
-            paymentService.deletePayment(id);
-//            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Delete payment successfully", id, true);
-            return new ResponseEntity<>(null, HttpStatus.OK);
-        } catch (Exception e) {
-//            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Delete payment failed", e.getMessage(), false);
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
+  @DeleteMapping("/delete/{id}")
+  public ResponseEntity<ResponseMessageDto> deletePayment(@PathVariable Long id) {
+    try {
+      paymentService.deletePayment(id);
+      //            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Delete payment
+      // successfully", id, true);
+      return new ResponseEntity<>(null, HttpStatus.OK);
+    } catch (Exception e) {
+      //            ResponseMessageDto responseMessageDto = new ResponseMessageDto("Delete payment
+      // failed", e.getMessage(), false);
+      return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    }
     }
 }

@@ -17,14 +17,14 @@ public class ProductDto {
     private Long id;
 
     @NotNull(message = "User cannot be null")
-    private UserDto user;
+    private Long userId;
 
     @NotEmpty(message = "Product name cannot be empty")
     @Pattern(regexp = "^[A-Za-z0-9 _-]+$", message = "Product name contains invalid characters")
     private String productName;
 
     @NotNull(message = "Category cannot be null")
-    private CategoryDto category;
+    private Long categoryId;
 
     @NotEmpty(message = "Description cannot be empty")
     private String description;

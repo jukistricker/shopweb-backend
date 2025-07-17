@@ -62,7 +62,6 @@ public class SecurityConfig {
 
     private final String[] AUTH_URLS = {
 
-
             "api/v1/user/updateById/{user_id}",
             "api/v1/user/deleteById/{user_id}",
 
@@ -107,14 +106,9 @@ public class SecurityConfig {
             "api/v1/feedback/update/{id}",
             "api/v1/feedback/delete/{id}",
 
-
-
-
     };
 
     private final String[] PUBLIC_URLS = {
-
-
 
             "api/v1/auth/logout",
             "api/v1/auth/token",
@@ -140,7 +134,6 @@ public class SecurityConfig {
             "api/v1/attribute/getById/{id}",
 
             "api/v1/feedback/all/{id}",
-
 
     };
 

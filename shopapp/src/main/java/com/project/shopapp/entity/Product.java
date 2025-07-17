@@ -19,16 +19,16 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+
+    @Column(name = "user_id",length = 100,nullable = false)
+    private Long userId;
 
     @Column(name = "product_name",length = 100,nullable = false)
     private String productName;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
+
+    @Column(name = "category_id",length = 100,nullable = false)
+    private Long categoryId;
 
     @Column(name = "description",nullable = false)
     private String description;
@@ -67,11 +67,11 @@ public class Product {
         PRE_ORDER
     }
 
-    public Product(Long id, User user, String productName,Category category,String description,String featuredImageUrl, BigDecimal price,Integer quantity ){
+    public Product(Long id, Long userId, String productName,Long categoryId,String description,String featuredImageUrl, BigDecimal price,Integer quantity ){
         this.id = id;
-        this.user = user;
+        this.userId = userId;
         this.productName = productName;
-        this.category = category;
+        this.categoryId = categoryId;
         this.description = description;
         this.featuredImageUrl = featuredImageUrl;
         this.price = price;

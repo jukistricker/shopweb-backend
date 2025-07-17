@@ -5,23 +5,18 @@ import com.project.shopapp.dto.ProductDto;
 import com.project.shopapp.entity.Category;
 import com.project.shopapp.entity.Product;
 import com.project.shopapp.entity.User;
-import com.project.shopapp.mapper.CategoryMapper;
-import com.project.shopapp.mapper.ProductMapper;
 import com.project.shopapp.mapper.ProductMapper;
 import com.project.shopapp.repository.CategoryRepository;
 import com.project.shopapp.repository.ProductRepository;
 import com.project.shopapp.repository.UserRepository;
 import com.project.shopapp.service.ProductService;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -139,7 +134,7 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDto>  getProductsByUserId(Long user_id){
         User user = userRepository.findById(user_id)
                 .orElseThrow(()-> new EntityNotFoundException("User with id: "+user_id+" not found"));
-        List<Product> products = productRepository.findByUser(user);
+        List<Product> products = productRepository.findByUserId(user_id);
         if (products.isEmpty()){
             return null;
         }
@@ -150,7 +145,7 @@ public class ProductServiceImpl implements ProductService {
     public  List<ProductDto> getProductsByCategoryId(Long category_id){
         Category category = categoryRepository.findById(category_id)
                 .orElseThrow(()-> new EntityNotFoundException("Category with id: "+category_id+" not found"));
-        List<Product> products = productRepository.findByCategory(category);
+        List<Product> products = productRepository.findByCategoryId(category_id);
         if (products.isEmpty()){
             return null;
         }

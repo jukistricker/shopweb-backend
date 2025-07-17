@@ -8,12 +8,12 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring", uses = {UserMapper.class, CategoryMapper.class})
 public interface ProductMapper {
-    @Mapping(source = "user", target = "user")
-    @Mapping(source = "category", target = "category")
+    @Mapping(source = "userId", target = "userId")
+    @Mapping(source = "categoryId", target = "categoryId")
     ProductDto maptoDto(Product product);
 
-    @Mapping(source = "user", target = "user")
-    @Mapping(source = "category", target = "category")
+    @Mapping(source = "userId", target = "userId")
+    @Mapping(source = "categoryId", target = "categoryId")
     Product maptoEntity(ProductDto dto);
 }
 
